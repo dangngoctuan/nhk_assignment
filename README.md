@@ -8,3 +8,5 @@
 ## For seed data
 - init car properties
 - use constant variable and class method in Car class for build data
+
+Note: I'm not use ActiveRecord cause I want to focus to problem solving by handle logic
