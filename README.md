@@ -1,5 +1,5 @@
 ## For Model
-- add Car class
+- add Car class not using ActiveRecord
 - add constant variable with car properties field
 - add attr_accessor for Car, purpose is possible get and set value to car field
 - When call a new Car object it will auto add field to object
@@ -7,6 +7,4 @@
 
 ## For seed data
 - init car properties
-- use constant variable and call method of instance object for build data
-
-NOTE: I create a nhk_assignment file for running both rspec and code
+- use constant variable and class method in Car class for build data
