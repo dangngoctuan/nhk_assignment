@@ -1,0 +1,2 @@
+- name: Mention Reviewers
+  uses: Techshift/mention-reviewers@1.0.0
