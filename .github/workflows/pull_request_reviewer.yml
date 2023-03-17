@@ -10,12 +10,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Extract username
-        uses: actions-ecosystem/action-regex-match@v2
-        id: extract
-        with:
-          text: ${{ github.event.comment.body }}
-          regex: '(@\S+)'
+      # - name: Extract username
+      #   uses: actions-ecosystem/action-regex-match@v2
+      #   id: extract
+      #   with:
+      #     text: ${{ github.event.comment.body }}
+      #     regex: '(@\S+)'
       # - name: Check if user exists
       #   uses: actions/github-script@v5
       #   with:
@@ -31,12 +31,36 @@ jobs:
       #   id: check
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Add user as reviewer
+      - name: Authenticate with GitHub
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@github'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create review request
         uses: actions/github-script@v5
         with:
           script: |
-            const { owner, repo } = context.repo;
-            const username = 'tuandang-rikai';
-            const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            const context = github.context;
+            const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
+            const owner = context.payload.repository.owner.login;
+            const repo = context.payload.repository.name;
+            const pull_number = context.payload.pull_request.number;
+            const reviewers = ['tuandang-rikai'];
+            const response = await octokit.pulls.createReviewRequest({
+              owner,
+              repo,
+              pull_number,
+              reviewers
+            });
+            console.log(response);
+      # - name: Add user as reviewer
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       const { owner, repo } = context.repo;
+      #       const username = 'tuandang-rikai';
+      #       const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
