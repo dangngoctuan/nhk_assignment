@@ -1,8 +1,8 @@
 name: GitHub Actions Demo
 on:
-  pull_request_review_comment:
+  pull_request_review:
     types:
-      - created
+      - submitted
 jobs:
   request-reviewer:
     runs-on: ubuntu-latest
