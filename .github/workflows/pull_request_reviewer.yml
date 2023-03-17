@@ -37,7 +37,7 @@ jobs:
         with:
           script: |
             const { owner, repo, pull_request } = context.repo;
-            pull_number = github.event.client_payload.github.event.pull_request.number
+            pull_number = pull_request.number
             const username = 'tuandang-rikai';
             console.log(owner, repo)
             const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
