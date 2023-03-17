@@ -36,8 +36,7 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
-            const username = '${{ steps.check.outputs.username }}';
-            console.log(username)
-            const response = await github.rest.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
+            const username = 'tuandang-rikai';
+            const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
