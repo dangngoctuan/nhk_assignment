@@ -1,9 +1,6 @@
 name: Pull Request Reviewer
 
-on:
-  pull_request_review:
-    types:
-      - submitted
+on: [issue_comment]
 jobs:
   request-reviewer:
     runs-on: ubuntu-latest
@@ -11,7 +8,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Extract username
-        uses: actions/regex-match@v1
+        uses: actions-ecosystem/action-regex-match@v2
         id: extract
         with:
           text: ${{ github.event.comment.body }}
