@@ -23,6 +23,7 @@ jobs:
         with:
           script: |
             const username = '${{ steps.extract.outputs.matches }}';
+            console.log(username)
             const octokit = require("@octokit/request");
             const response = await octokit.request("GET /users/{username}", {
               username: username
