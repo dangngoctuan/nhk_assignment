@@ -44,7 +44,6 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const context = github.context;
             const octokit = new github.GitHub(process.env.GITHUB_TOKEN);
             const owner = context.payload.repository.owner.login;
             const repo = context.payload.repository.name;
