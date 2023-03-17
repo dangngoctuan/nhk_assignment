@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install @actions/core @actions/github @octokit/core @octokit/request @github-script/core
       - name: Extract username
         uses: actions-ecosystem/action-regex-match@v2
         id: extract
@@ -21,10 +23,11 @@ jobs:
         with:
           script: |
             const username = '${{ steps.extract.outputs.matches }}';
-            const response = await github.request("GET /users/{username}", {
+            const octokit = require("@octokit/request");
+            const response = await octokit.request("GET /users/{username}", {
               username: username
             });
-            console.log(response)
+            console.log(response.data)
             return { exists: response.data.total_count === 1, username: username };
         id: check
         env:
