@@ -1,22 +1,12 @@
 name: Review requested
 
 on:
-  pull_request:
-    types: [review_requested]
+  pull_request_review:
+    types: [submitted]
 
 jobs:
-  test:
+  approved:
+    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
-    name: A job to test the action
     steps:
-    - uses: actions/checkout@v1
-    - name: Extract info
-      uses: ./ # Uses an action in the root directory
-      id: mention-reviews
-    # Use the output from the `mention-reviews` step
-    - name: Mention reviewers
-      uses: actions/github@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        args: comment "${{ steps.mention-reviews.outputs.mentions }} your review has been requested ⏳"
+      - run: echo "This PR was approved"
