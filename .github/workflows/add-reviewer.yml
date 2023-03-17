@@ -1,0 +1,42 @@
+# name: Review requested
+
+# on:
+#   issue_comment:
+#     types: [created]
+
+# steps:
+#   - name: Checkout code
+#     uses: actions/checkout@v2
+#   - name: Extract username
+#     uses: actions/regex-match@v1
+#   id: extract
+#   with:
+#     text: ${{ github.event.comment.body }}
+#     regex: '(@\S+)'
+#   - name: Check if user exists
+#     uses: actions/github-script@v4
+#     with:
+#       script: |
+#         const username = '${{ steps.extract.outputs.matches }}';
+#         const response = await github.search.user({ q: username });
+#         return { exists: response.data.total_count === 1, username: username };
+#     id: check
+#     env:
+#       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+name: Auto-add Reviewer
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  auto-add-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Add Reviewer
+        uses: peter-evans/add-reviewer@v1.0.1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          reviewer: ${{ github.event.comment.user.login }}
