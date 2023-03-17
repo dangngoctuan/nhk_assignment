@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install @actions/core @actions/github @octokit/core @octokit/request @github-script/core
       - name: Extract username
         uses: actions-ecosystem/action-regex-match@v2
         id: extract
@@ -17,22 +19,26 @@ jobs:
           text: ${{ github.event.comment.body }}
           regex: '(@\S+)'
       - name: Check if user exists
-        uses: actions/github-script@v4
+        uses: actions/github-script@v5
         with:
           script: |
+            const octokit = require("@octokit/request");
             const username = '${{ steps.extract.outputs.matches }}';
-            const response = await github.search.user({ q: username });
+            const response = await octokit.request("GET /users/{username}", {
+              username: username
+            });
+            console.log(response)
             return { exists: response.data.total_count === 1, username: username };
         id: check
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add user as reviewer
-        uses: actions/github-script@v4
+        uses: actions/github-script@v5
         if: ${{ steps.check.outputs.exists }}
         with:
           script: |
             const { owner, repo } = context.repo;
             const username = '${{ steps.check.outputs.username }}';
-            const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
+            const response = await github.rest.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
