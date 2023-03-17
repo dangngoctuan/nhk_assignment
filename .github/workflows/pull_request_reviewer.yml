@@ -1,0 +1,38 @@
+name: Pull Request Reviewer
+
+on:
+  pull_request_review:
+    types:
+      - submitted
+jobs:
+  request-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Extract username
+        uses: actions-ecosystem/action-regex-match@v2
+        id: extract
+        with:
+          text: ${{ github.event.comment.body }}
+          regex: '(@\S+)'
+      - name: Check if user exists
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const username = '${{ steps.extract.outputs.matches }}';
+            const response = await github.search.user({ q: username });
+            return { exists: response.data.total_count === 1, username: username };
+        id: check
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add user as reviewer
+        uses: actions/github-script@v4
+        if: ${{ steps.check.outputs.exists }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const username = '${{ steps.check.outputs.username }}';
+            const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
