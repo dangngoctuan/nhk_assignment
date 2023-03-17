@@ -33,12 +33,12 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add user as reviewer
-        uses: actions/github-script@v5
+        uses: actions/github-script@0.9.0
         with:
           script: |
             const { owner, repo } = context.repo;
             const username = 'tuandang-rikai';
             console.log(owner, repo)
-            const response = await context.github.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
+            const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
