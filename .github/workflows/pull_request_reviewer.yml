@@ -36,9 +36,10 @@ jobs:
         uses: actions/github-script@0.9.0
         with:
           script: |
-            const { owner, repo } = context.repo;
+            const { owner, repo, pull_request } = context.repo;
+            pull_number = github.event.client_payload.github.event.pull_request.number
             const username = 'tuandang-rikai';
             console.log(owner, repo)
-            const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, reviewers: [username] });
+            const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
