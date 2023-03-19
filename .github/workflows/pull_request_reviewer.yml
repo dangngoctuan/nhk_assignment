@@ -1,48 +1,52 @@
-# name: Pull Request Reviewer
+name: Pull Request Reviewer
 
-# on:
-#   pull_request_review:
-#     types:
-#       - submitted
-# jobs:
-#   request-reviewer:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-#       # - name: Extract username
-#       #   uses: actions-ecosystem/action-regex-match@v2
-#       #   id: extract
-#       #   with:
-#       #     text: ${{ github.event.comment.body }}
-#       #     regex: '(@\S+)'
-#       # - name: Check if user exists
-#       #   uses: actions/github-script@v5
-#       #   with:
-#       #     script: |
-#       #       const username = '${{ steps.extract.outputs.matches }}';
-#       #       console.log(username)
-#       #       const octokit = require("@octokit/request");
-#       #       const response = await octokit.request("GET /users/{username}", {
-#       #         username: username
-#       #       });
-#       #       console.log(response.data)
-#       #       return { exists: response.data.total_count === 1, username: username };
-#       #   id: check
-#       #   env:
-#       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+on:
+  issue_comment:
+    types:
+      - created
+jobs:
+  request-reviewer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Checkout Pull Request
+        run: hub pr checkout ${{ github.event.issue.number }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Extract username
+      #   uses: actions-ecosystem/action-regex-match@v2
+      #   id: extract
+      #   with:
+      #     text: ${{ github.event.comment.body }}
+      #     regex: '(@\S+)'
+      # - name: Check if user exists
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       const username = '${{ steps.extract.outputs.matches }}';
+      #       console.log(username)
+      #       const octokit = require("@octokit/request");
+      #       const response = await octokit.request("GET /users/{username}", {
+      #         username: username
+      #       });
+      #       console.log(response.data)
+      #       return { exists: response.data.total_count === 1, username: username };
+      #   id: check
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-#       - name: Add user as reviewer
-#         uses: actions/github-script@0.9.0
-#         with:
-#           script: |
-#             const { owner, repo } = context.repo;
-#             const username = 'tuandang-rikai';
-#             console.log(context)
-#             console.log(context.repo)
-#             # const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add user as reviewer
+        uses: actions/github-script@0.9.0
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const username = 'tuandang-rikai';
+            console.log(context)
+            console.log(context.repo)
+            # const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # name: Testing actions
 # on: [issue_comment]
@@ -59,14 +63,3 @@
 #         env:
 #           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-name: Test
-on:
-  issue_comment:
-    types: [created, edit]
-jobs:
-  pull_request_review:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Execute for pull request comments only
-        if: github.event.issue.pull_request
-        run: echo "This is a pull request comment event"
