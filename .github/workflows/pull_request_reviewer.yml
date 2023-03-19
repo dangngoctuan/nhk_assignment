@@ -5,12 +5,6 @@ jobs:
   request-reviewer:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Checkout Pull Request
-        run: hub pr checkout ${{ github.event.issue.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: assign_review_by_comment
         uses: cats-oss/github-action-auto-assign@v2
         env:
