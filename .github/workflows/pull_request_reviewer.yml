@@ -42,8 +42,7 @@ jobs:
           script: |
             const { owner, repo } = context.repo;
             const username = 'tuandang-rikai';
-            console.log(context)
-            console.log(context.repo)
+            pull_number = context.payload.issue.number
             const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
