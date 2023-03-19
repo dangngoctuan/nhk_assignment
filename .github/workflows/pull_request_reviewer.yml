@@ -1,45 +1,80 @@
-name: Pull Request Reviewer
+# name: Pull Request Reviewer
 
+# on:
+#   pull_request_review:
+#     types:
+#       - submitted
+# jobs:
+#   request-reviewer:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+#       # - name: Extract username
+#       #   uses: actions-ecosystem/action-regex-match@v2
+#       #   id: extract
+#       #   with:
+#       #     text: ${{ github.event.comment.body }}
+#       #     regex: '(@\S+)'
+#       # - name: Check if user exists
+#       #   uses: actions/github-script@v5
+#       #   with:
+#       #     script: |
+#       #       const username = '${{ steps.extract.outputs.matches }}';
+#       #       console.log(username)
+#       #       const octokit = require("@octokit/request");
+#       #       const response = await octokit.request("GET /users/{username}", {
+#       #         username: username
+#       #       });
+#       #       console.log(response.data)
+#       #       return { exists: response.data.total_count === 1, username: username };
+#       #   id: check
+#       #   env:
+#       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+#       - name: Add user as reviewer
+#         uses: actions/github-script@0.9.0
+#         with:
+#           script: |
+#             const { owner, repo } = context.repo;
+#             const username = 'tuandang-rikai';
+#             console.log(context)
+#             console.log(context.repo)
+#             # const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+name: Testing actions
 on:
-  pull_request_review:
-    types:
-      - submitted
+  issue_comment:
+    types: [created, edited]
+
 jobs:
-  request-reviewer:
+  testing-actions:
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '@test')
+    name: Just testing
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      # - name: Extract username
-      #   uses: actions-ecosystem/action-regex-match@v2
-      #   id: extract
-      #   with:
-      #     text: ${{ github.event.comment.body }}
-      #     regex: '(@\S+)'
-      # - name: Check if user exists
-      #   uses: actions/github-script@v5
-      #   with:
-      #     script: |
-      #       const username = '${{ steps.extract.outputs.matches }}';
-      #       console.log(username)
-      #       const octokit = require("@octokit/request");
-      #       const response = await octokit.request("GET /users/{username}", {
-      #         username: username
-      #       });
-      #       console.log(response.data)
-      #       return { exists: response.data.total_count === 1, username: username };
-      #   id: check
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Add user as reviewer
-        uses: actions/github-script@0.9.0
+      - name: Get PR details
+        uses: xt0rted/pull-request-comment-branch@v1
+        id: comment-branch
+      - name: Set commit status as pending
+        uses: myrotvorets/set-commit-status-action@master
         with:
-          script: |
-            const { owner, repo } = context.repo;
-            const username = 'tuandang-rikai';
-            console.log(context)
-            console.log(context.repo)
-            # const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          sha: ${{ steps.comment-branch.outputs.head_sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: pending
+
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
+      - name: Print stuff
+        run: echo "Hello dudes!"
+
+      - name: Set final commit status
+        uses: myrotvorets/set-commit-status-action@master
+        if: always()
+        with:
+          sha: ${{ steps.comment-branch.outputs.head_sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          status: ${{ job.status }}
