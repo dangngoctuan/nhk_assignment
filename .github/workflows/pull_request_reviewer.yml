@@ -36,16 +36,23 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Add user as reviewer
-        uses: actions/github-script@v5
+      # - name: Add user as reviewer
+      #   uses: actions/github-script@v5
+      #   with:
+      #     script: |
+      #       const { owner, repo } = context.repo;
+      #       const username = 'tuandang-rikai';
+      #       pull_number = context.payload.issue.number
+      #       const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add Reviewers
+        uses: madrapps/add-reviewers@v1
         with:
-          script: |
-            const { owner, repo } = context.repo;
-            const username = 'tuandang-rikai';
-            pull_number = context.payload.issue.number
-            const response = await github.pulls.requestReviewers({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: tuandang-rikai
+          re-request-when-approved: true
+          re-request-when-changes-requested: false
 
 # name: Testing actions
 # on: [issue_comment]
