@@ -44,7 +44,7 @@ jobs:
             const username = 'tuandang-rikai';
             console.log(context)
             console.log(context.repo)
-            # const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
+            const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
