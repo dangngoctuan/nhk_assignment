@@ -12,7 +12,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: assign_review_by_comment
-        uses: rhs/add-reviewer-gh-action@1.0.6
+        uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
         with:
           reviewers: "tuandang-rikai"
           token: ${{ secrets.GITHUB_TOKEN }}
