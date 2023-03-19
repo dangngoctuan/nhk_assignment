@@ -14,6 +14,11 @@ jobs:
         run: hub pr checkout ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add Reviewers
+        uses: hkusu/review-assign-action@v1
+        id: assign
+        with:
+          reviewers: tuandang-rikai
       # - name: Extract username
       #   uses: actions-ecosystem/action-regex-match@v2
       #   id: extract
@@ -46,11 +51,6 @@ jobs:
       #       const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Add Reviewers
-        - uses: hkusu/review-assign-action@v1
-          id: assign
-          with:
-            reviewers: tuandang-rikai
 
 # name: Testing actions
 # on: [issue_comment]
