@@ -1,9 +1,6 @@
 name: Pull Request Reviewer
 
-on:
-  issue_comment:
-    types:
-      - created
+on: [issue_comment, pull_request_review]
 jobs:
   request-reviewer:
     runs-on: ubuntu-latest
@@ -14,11 +11,15 @@ jobs:
         run: hub pr checkout ${{ github.event.issue.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Add Reviewers
-        uses: hkusu/review-assign-action@v1
-        id: assign
-        with:
-          reviewers: tuandang-rikai
+      - name: assign_review_by_comment
+        uses: cats-oss/github-action-auto-assign@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Add Reviewers
+      #   uses: hkusu/review-assign-action@v1
+      #   id: assign
+      #   with:
+      #     reviewers: tuandang-rikai
       # - name: Extract username
       #   uses: actions-ecosystem/action-regex-match@v2
       #   id: extract
