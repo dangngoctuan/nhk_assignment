@@ -1,21 +1,46 @@
-name: Pull Request Reviewer
+name: Add Reviewer to Pull Request
 
-on: [issue_comment, pull_request_review]
+on:
+  pull_request_review_comment:
+    types: [created]
+
 jobs:
-  request-reviewer:
+  add_reviewer:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
-      - name: Checkout Pull Request
-        run: hub pr checkout ${{ github.event.issue.number }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: assign_review_by_comment
-        uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
+
+      - name: Get Comment Data
+        id: comment-data
+        run: echo "::set-output name=comment::${{ toJson(github.event.comment) }}"
+
+      - name: Add Reviewer
+        uses: peter-evans/add-reviewer@v1
         with:
-          reviewers: "tuandang-rikai"
-          token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ steps.comment-data.outputs.comment | fromJson | .pull_request.number }}
+          reviewer: ${{ steps.comment-data.outputs.comment | fromJson | .user.login }}
+
+# name: Pull Request Reviewer
+
+# on: [issue_comment, pull_request_review]
+# jobs:
+#   request-reviewer:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout
+#         uses: actions/checkout@v2
+#       - name: Checkout Pull Request
+#         run: hub pr checkout ${{ github.event.issue.number }}
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#       - name: assign_review_by_comment
+#         uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
+#         with:
+#           reviewers: "tuandang-rikai"
+#           token: ${{ secrets.GITHUB_TOKEN }}
       # - name: Add Reviewers
       #   uses: hkusu/review-assign-action@v1
       #   id: assign
