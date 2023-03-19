@@ -47,12 +47,10 @@ jobs:
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add Reviewers
-        uses: madrapps/add-reviewers@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          reviewers: tuandang-rikai
-          re-request-when-approved: true
-          re-request-when-changes-requested: false
+        - uses: hkusu/review-assign-action@v1
+          id: assign
+          with:
+            reviewers: tuandang-rikai
 
 # name: Testing actions
 # on: [issue_comment]
