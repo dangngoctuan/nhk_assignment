@@ -43,7 +43,7 @@ jobs:
             const { owner, repo } = context.repo;
             const username = 'tuandang-rikai';
             pull_number = context.payload.issue.number
-            const response = await github.issues.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
+            const response = await github.pulls.requestReviewers({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
