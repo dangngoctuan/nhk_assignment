@@ -12,10 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Add user as reviewer
-        uses: actions/github-script@v5
+        uses: actions/github-script@v4
         with:
           script: |
-            const github = require('@actions/github');
             const client = github.getOctokit(core.getInput("token"));
             const username = 'tuandang-rikai';
             pull_number = context.payload.issue.number
