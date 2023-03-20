@@ -11,14 +11,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Install dependencies
-        run: npm install @actions/core @actions/github
       - name: Add user as reviewer
         uses: actions/github-script@v5
         with:
           script: |
-            const core = require('@actions/core');
-            const github = require('@actions/github');
             const client = github.getOctokit(core.getInput("token"));
             const username = 'tuandang-rikai';
             pull_number = context.payload.issue.number
