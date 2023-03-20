@@ -12,7 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Add user as reviewer
-        uses: actions/github-script@v5
         run: |
           curl \
             -X POST \
