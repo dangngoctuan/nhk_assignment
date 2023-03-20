@@ -23,8 +23,8 @@ jobs:
         with:
           script: |
             const username = 'tuandang-rikai';
-            pull_number = context.payload.issue.number
-            repo = github.repository
+            const pull_number = context.payload.issue.number
+            const repo = github.repository
             console.log(pull_number)
             console.log(repo)
             const response = await github.request("POST /repos/${{repo}}/pulls/${{pull_number}}/requested_reviewers", {
