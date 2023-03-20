@@ -22,10 +22,10 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
-            const { owner, repo } = context.repo;
             const username = 'tuandang-rikai';
             pull_number = context.payload.issue.number
-            const response = await github.request("GET /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers", {
+            repo = github.repository
+            const response = await github.request("POST /repos/{repo}/pulls/{pull_number}/requested_reviewers", {
               reviewers: ["tuandang-rikai"]
             });
 
