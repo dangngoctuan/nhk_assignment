@@ -25,7 +25,9 @@ jobs:
             const username = 'tuandang-rikai';
             pull_number = context.payload.issue.number
             repo = github.repository
-            const response = await github.request("POST /repos/{repo}/pulls/{pull_number}/requested_reviewers", {
+            console.log(pull_number)
+            console.log(repo)
+            const response = await github.request("POST /repos/${{repo}}/pulls/${{pull_number}}/requested_reviewers", {
               reviewers: ["tuandang-rikai"]
             });
 
