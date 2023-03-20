@@ -12,20 +12,28 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Add user as reviewer
-        uses: actions/github-script@v4
-        with:
-          script: |
-            const client = github.getOctokit(core.getInput("token"));
-            const username = 'tuandang-rikai';
-            pull_number = context.payload.issue.number
-            const params = {
-                ...context.repo,
-                pull_number: pull_number,
-                reviewers: [username],
-            };
-            const response = await client.pulls.requestReviewers(params);
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/github-script@v5
+        run: |
+          curl \
+            -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/<OWNER>/<REPO>/pulls/${{ github.event.pull_request.number }}/requested_reviewers \
+            --data '{"reviewers": ["tuandang-rikai"]}'
+        # uses: actions/github-script@v4
+        # with:
+        #   script: |
+        #     const client = github.getOctokit(core.getInput("token"));
+        #     const username = 'tuandang-rikai';
+        #     pull_number = context.payload.issue.number
+        #     const params = {
+        #         ...context.repo,
+        #         pull_number: pull_number,
+        #         reviewers: [username],
+        #     };
+        #     const response = await client.pulls.requestReviewers(params);
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # name: Pull Request Reviewer
 
