@@ -11,17 +11,25 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Get Comment Data
-        id: comment-data
-        run: echo "::set-output name=comment::${{ toJson(github.event.comment) }}"
-
-      - name: Add Reviewer
-        uses: peter-evans/add-reviewer@v1
+      - name: Install dependencies
+        run: npm install @actions/core @actions/github
+      - name: Add user as reviewer
+        uses: actions/github-script@v5
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          pull-request-number: ${{ steps.comment-data.outputs.comment | fromJson | .pull_request.number }}
-          reviewer: ${{ steps.comment-data.outputs.comment | fromJson | .user.login }}
+          script: |
+            const core = require('@actions/core');
+            const github = require('@actions/github');
+            const client = github.getOctokit(core.getInput("token"));
+            const username = 'tuandang-rikai';
+            pull_number = context.payload.issue.number
+            const params = {
+                ...context.repo,
+                pull_number: pull_number,
+                reviewers: [username],
+            };
+            const response = await client.pulls.requestReviewers(params);
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 # name: Pull Request Reviewer
 
