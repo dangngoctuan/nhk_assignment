@@ -45,15 +45,14 @@ jobs:
         if: ${{ steps.check_users.outputs.result }} !== []
         with:
           script: |
-            const available_users = ${{ steps.check_users.outputs.result }}
-            const { issue, repository } = context.payload
-            const reviewers = available_users
-            const pull_number = issue.number
+            const available_users = ${{ steps.check_users.outputs.result }};
+            const { issue, repository } = context.payload;
+            const pull_number = issue.number;
             await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
               owner: 'dangngoctuan',
               repo: repository.name,
               pull_number: pull_number,
-              reviewers: reviewers
+              reviewers: available_users
             });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
