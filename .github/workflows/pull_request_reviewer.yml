@@ -15,13 +15,13 @@ jobs:
         uses: actions-ecosystem/action-regex-match@v2
         id: extract
         with:
-          text: ${{ github.context.payload.comment.body }}
-          regex: '(@\S+)'
+          text: ${{ github.event.comment.body }}
+          regex: '@([a-zA-Z0-9-_]+)'
       - name: Add user as reviewer
         uses: actions/github-script@v4
         with:
           script: |
-            const username = '${{ steps.extract.outputs.matches }}';
+            const username = '${{ steps.extract.outputs.group1 }}';
             console.log(username)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
