@@ -12,14 +12,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Extract username
+        uses: actions-ecosystem/action-regex-match@v2
         id: extract
-        run: |
-          echo "mentioned_users=$(echo "@dangngoctuan @tuandang-rikai pelase review" | grep -oP '@([a-zA-Z0-9-_]+)' | cut -c 2-)" >> "$GITHUB_OUTPUT"
+        with:
+          text: ${{ context.payload.comment.body }}
+          regex: '(@\S+)'
       - name: Add user as reviewer
         uses: actions/github-script@v4
         with:
           script: |
-            const username = '${{ steps.extract.outputs.mentioned_users }}';
+            const username = '${{ steps.extract.outputs.matches }}';
             console.log(username)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
