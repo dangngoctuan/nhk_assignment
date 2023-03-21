@@ -20,20 +20,17 @@ jobs:
           regex: '@([a-zA-Z0-9-_]+) [Rr]eview [Rr]equest'
       - name: Check if user exists
         uses: actions/github-script@v6
-        id: check_user
         with:
           script: |
             const username = '${{ steps.extract.outputs.group1 }}';
             const response = await github.request('GET /users/{username}', {
               username: username
             });
-            console.log(response)
-            console.log(response.status)
-            console.log(response.data)
             return {
               exists: response.status === 200,
               username: response.data.login
             }
+        id: check_user
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add user as reviewer
