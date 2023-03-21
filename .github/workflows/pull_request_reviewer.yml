@@ -14,7 +14,7 @@ jobs:
       - name: Extract username
         id: extract
         run: |
-          echo "mentioned_users=$(echo "${GITHUB_EVENT.issue.body}" | grep -oE '@([a-zA-Z0-9-]+)' | cut -c 2-)" >> "$GITHUB_OUTPUT"
+          echo "mentioned_users=$(echo "@tuantees" | grep -oE '@([a-zA-Z0-9-]+)' | cut -c 2-)" >> "$GITHUB_OUTPUT"
       - name: Add user as reviewer
         uses: actions/github-script@v4
         with:
