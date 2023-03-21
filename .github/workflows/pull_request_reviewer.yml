@@ -27,18 +27,15 @@ jobs:
             const response = await github.request('GET /users/{username}', {
               username: username
             });
-            return {
-              exists: response.status === 200,
-              username: response.data.login
-            }
+            return response.status === 200;
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add user as reviewer
         uses: actions/github-script@v6
+        if: ${{ steps.check_user.outputs.result }}
         with:
           script: |
-            console.log('${{ steps.check_user.outputs.result }}')
-            const username = '${{ steps.check_user.outputs.result.username }}';
+            const username = '${{ steps.extract.outputs.group1 }}';
             console.log(username)
             const { issue, repository } = context.payload
             const reviewers = [username]
