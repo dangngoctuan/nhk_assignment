@@ -19,8 +19,9 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const username = '${{ steps.extract.outputs }}';
-            console.log(username)
+            const username = '${{ Object.keys(steps.extract.outputs) }}';
+            console.log('${{ Object.keys(steps.extract.outputs) }}')
+            console.log('${{ Object.values(steps.extract.outputs) }}')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
