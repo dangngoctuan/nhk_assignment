@@ -41,7 +41,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const username = '${{ steps.check_users.outputs.available_users }}';
+            const username = '${{ steps.check_users.outputs.result }}';
             console.log(username)
             const { issue, repository } = context.payload
             const reviewers = [username]
