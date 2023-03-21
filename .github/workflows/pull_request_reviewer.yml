@@ -23,10 +23,14 @@ jobs:
         with:
           script: |
             const { issue, repository, owner } = context.payload
-            const username = 'tuandang-rikai';
+            const username = 'dangngoctuan';
+            const reviewers = [username]
             const pull_number = issue.number
-            const response = await github.request('POST /repos/dangngoctuan/chk_assignment/pulls/7/requested_reviewers', {
-              reviewers: ["tuandang-rikai"],
+            console.log(context)
+            const repo_name = repository.name
+            const owner_name = owner.login
+            const response = await github.request("POST /repos/${{ owner_name }}/${{ repo_name }}/pulls/${{ pull_number }}/requested_reviewers", {
+              reviewers: reviewers,
               headers: {
                 'X-GitHub-Api-Version': '2022-11-28'
               }
