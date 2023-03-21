@@ -3,6 +3,8 @@ name: Add Reviewer to Pull Request
 on:
   issue_comment:
     types: [created]
+    branches:
+      - main
 
 jobs:
   add_reviewer:
