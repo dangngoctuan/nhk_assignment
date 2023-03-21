@@ -19,6 +19,7 @@ jobs:
           text: ${{ github.event.comment.body }}
           regex: '@([a-zA-Z0-9-_]+) [Rr]eview [Rr]equest'
       - name: Add user as reviewer
+        if: steps.extract.outputs.group1.length > 0
         uses: actions/github-script@v6
         with:
           script: |
