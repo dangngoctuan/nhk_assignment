@@ -26,7 +26,7 @@ jobs:
             let list_users = '${{ steps.extract.outputs.mentioned_users }}';
             list_users = list_users.split(' ')
             let available_users = []
-            const pull_request_author = ${{ github.event.issue.user.login }}
+            const pull_request_author = '${{ github.event.issue.user.login }}';
             for (const username of list_users) {
               if ( username !== pull_request_author ) {
                 const response = await github.request('GET /users/{username}', {
