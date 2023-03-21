@@ -23,14 +23,6 @@ jobs:
         with:
           script: |
             const username = '${{ steps.extract.outputs.group1 }}';
-            const { issue, repository } = context.payload
-            const reviewers = [username]
-            const pull_number = issue.number
-            const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
-              owner: 'dangngoctuan',
-              repo: repository.name,
-              pull_number: pull_number,
-              reviewers: reviewers
-            });
+            console.log(context)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
