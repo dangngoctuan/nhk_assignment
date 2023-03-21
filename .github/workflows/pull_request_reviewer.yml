@@ -13,7 +13,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Extract username
-        uses: actions-ecosystem/action-regex-match@v2
+        uses: KyoriPowered/action-regex-match@v3
         id: extract
         with:
           text: ${{ github.event.comment.body }}
