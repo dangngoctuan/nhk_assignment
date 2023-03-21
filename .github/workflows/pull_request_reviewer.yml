@@ -20,31 +20,37 @@ jobs:
           echo "mentioned_users=${mentioned_users[@]}" >> $GITHUB_OUTPUT
       - name: Check if user exists
         uses: actions/github-script@v6
-        id: check_user
+        id: check_users
         with:
           script: |
-            const username = '${{ steps.extract.outputs.mentioned_users }}';
-            console.log(username)
-            # const response = await github.request('GET /users/{username}', {
-            #   username: username
-            # });
-            # return response.status === 200;
+            let list_users = '${{ steps.extract.outputs.mentioned_users }}';
+            list_users = list_users.split(' ')
+            let available_users = []
+            for (const username of list_users) {
+              const response = await github.request('GET /users/{username}', {
+                username: username
+              });
+              if (response.status === 200) {
+                available_users.push(username)
+              }
+            }
+            return { available_users: available_users }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Add user as reviewer
-      #   uses: actions/github-script@v6
-      #   if: ${{ steps.check_user.outputs.result }}
-      #   with:
-      #     script: |
-      #       const username = '${{ steps.extract.outputs.group1 }}';
-      #       const { issue, repository } = context.payload
-      #       const reviewers = [username]
-      #       const pull_number = issue.number
-      #       await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
-      #         owner: 'dangngoctuan',
-      #         repo: repository.name,
-      #         pull_number: pull_number,
-      #         reviewers: reviewers
-      #       });
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add user as reviewer
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const username = '${{ steps.check_users.outputs.available_users }}';
+            console.log(username)
+            const { issue, repository } = context.payload
+            const reviewers = [username]
+            const pull_number = issue.number
+            await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
+              owner: 'dangngoctuan',
+              repo: repository.name,
+              pull_number: pull_number,
+              reviewers: reviewers
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
