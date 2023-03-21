@@ -28,7 +28,7 @@ jobs:
             console.log(context)
             const pull_number = issue.number
             const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
-              owner: 'dangngoctuan'
+              owner: 'dangngoctuan',
               repo: repository.name,
               pull_number: pull_number,
               reviewers: reviewers,
