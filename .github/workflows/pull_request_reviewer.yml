@@ -16,9 +16,6 @@ jobs:
         id: extract
         run: |
           echo "mentioned_users=$(echo '${{ github.event.comment.body }}' | grep -oP '@([a-zA-Z0-9-_]+) [Rr]eview [Rr]equest' | cut -c 2- | cut -d ' ' -f1)" >> "$GITHUB_OUTPUT"
-        with:
-          text: ${{ github.event.comment.body }}
-          regex: '@([a-zA-Z0-9-_]+) [Rr]eview [Rr]equest'
       - name: Check if user exists
         uses: actions/github-script@v6
         id: check_user
