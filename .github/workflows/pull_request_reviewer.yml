@@ -12,11 +12,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Extract username
-        uses: actions/github-script@v4
         id: extract
-        with:
-          run: |
-            $(echo "${GITHUB_EVENT.issue.body}" | grep -oE '@([a-zA-Z0-9-]+)' | cut -c 2-)
+        run: |
+          $(echo "${GITHUB_EVENT.issue.body}" | grep -oE '@([a-zA-Z0-9-]+)' | cut -c 2-)
       - name: Add user as reviewer
         uses: actions/github-script@v4
         with:
