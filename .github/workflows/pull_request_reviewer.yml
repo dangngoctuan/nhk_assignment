@@ -12,7 +12,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Install dependence
-        run: npm install @octokit/core @octokit/request
+        run: npm install @octokit/rest
       - name: Add user as reviewer
         # run: |
         #   curl \
@@ -22,11 +22,13 @@ jobs:
         #     https://api.github.com/repos/${{ github.event.owner }}/${{ github.event.repo }}/pulls/${{ github.event.pull_request.number }}/requested_reviewers \
         #     --data '{"reviewers": ["tuandang-rikai"]}'
         uses: actions/github-script@v6
+        env:
+          ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           script: |
-            const Octokit = require("@octokit/core");
+            const { Octokit } = require("@octokit/rest");
             const octokit = new Octokit({
-              auth: ${{ secrets.GITHUB_TOKEN }}
+              auth: $ACCESS_TOKEN
             });
             const { issue, repository, owner } = context.payload
             const username = 'tuandang-rikai';
