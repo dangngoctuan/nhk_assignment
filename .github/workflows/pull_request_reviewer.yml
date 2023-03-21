@@ -38,16 +38,5 @@ jobs:
         with:
           script: |
             console.log('${{ steps.check_user.outputs.exists }}')
-            # const username = '${{ steps.check_user.outputs.username }}';
-            # console.log(username)
-            # const { issue, repository } = context.payload
-            # const reviewers = [username]
-            # const pull_number = issue.number
-            # const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
-            #   owner: 'dangngoctuan',
-            #   repo: repository.name,
-            #   pull_number: pull_number,
-            #   reviewers: reviewers
-            # });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
