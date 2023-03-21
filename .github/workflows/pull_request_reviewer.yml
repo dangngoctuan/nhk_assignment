@@ -15,7 +15,7 @@ jobs:
         uses: actions-ecosystem/action-regex-match@v2
         id: extract
         with:
-          text: ${{ context.payload.comment.body }}
+          text: ${{ github.context.payload.comment.body }}
           regex: '(@\S+)'
       - name: Add user as reviewer
         uses: actions/github-script@v4
