@@ -34,7 +34,7 @@ jobs:
                 available_users.push(username)
               }
             }
-            return { available_users: available_users }
+            console.log({ available_users: available_users })
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add user as reviewer
