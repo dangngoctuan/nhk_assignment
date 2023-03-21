@@ -4,7 +4,7 @@ on:
   issue_comment:
     types: [created]
     branches:
-      - main
+      - '**'
 
 jobs:
   add_pull_request_reviewer:
