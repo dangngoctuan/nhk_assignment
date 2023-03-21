@@ -16,7 +16,7 @@ jobs:
         id: extract
         with:
           text: ${{ github.event.comment.body }}
-          regex: '(@\S+)'
+          regex: '@([a-zA-Z0-9-_]+)'
       - name: Add user as reviewer
         uses: actions/github-script@v4
         with:
