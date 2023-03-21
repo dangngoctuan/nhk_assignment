@@ -27,6 +27,9 @@ jobs:
             const response = await github.request('GET /users/{username}', {
               username: username
             });
+            console.log(response)
+            console.log(response.status)
+            console.log(response.data)
             return {
               exists: response.status === 200,
               username: response.data.login
