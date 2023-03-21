@@ -34,9 +34,21 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add user as reviewer
+        if: ${{ steps.check_user.outputs.result.exists }}
         uses: actions/github-script@v6
         with:
           script: |
-            console.log('${{ steps.check_user.outputs.exists }}')
+            console.log('${{ steps.check_user.outputs.result.exists }}')
+            const username = '${{ steps.check_user.outputs.result.username }}';
+            console.log(username)
+            const { issue, repository } = context.payload
+            const reviewers = [username]
+            const pull_number = issue.number
+            const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
+              owner: 'dangngoctuan',
+              repo: repository.name,
+              pull_number: pull_number,
+              reviewers: reviewers
+            });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
