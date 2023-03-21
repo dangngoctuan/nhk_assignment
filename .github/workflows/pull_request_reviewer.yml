@@ -24,9 +24,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
+            const Octokit = require("@octokit/core");
             const octokit = new Octokit({
               auth: secrets.GITHUB_TOKEN
-            })
+            });
             const { issue, repository, owner } = context.payload
             const username = 'tuandang-rikai';
             const pull_number = issue.number
