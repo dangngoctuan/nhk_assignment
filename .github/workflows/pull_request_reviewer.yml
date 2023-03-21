@@ -1,4 +1,4 @@
-name: Add Reviewer to Pull Request
+name: Add Pull Request Reviewer
 
 on:
   issue_comment:
@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  add_reviewer:
+  add_pull_request_reviewer:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -23,6 +23,14 @@ jobs:
         with:
           script: |
             const username = '${{ steps.extract.outputs.group1 }}';
-            console.log(context)
+            const { issue, repository } = context.payload
+            const reviewers = [username]
+            const pull_number = issue.number
+            const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
+              owner: 'dangngoctuan',
+              repo: repository.name,
+              pull_number: pull_number,
+              reviewers: reviewers
+            });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
