@@ -41,7 +41,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const available_users = ${{ steps.check_users.outputs.result.available_users }};
+            const available_users = ${{ steps.check_users.outputs.result.available_users }}
             console.log(available_users)
             const { issue, repository } = context.payload
             const reviewers = available_users
