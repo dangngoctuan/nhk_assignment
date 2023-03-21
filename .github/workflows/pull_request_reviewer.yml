@@ -21,7 +21,7 @@ jobs:
         id: check_user
         with:
           script: |
-            const username = '${{ steps.extract.outputs.result }}';
+            const username = '${{ steps.extract.outputs.mentioned_users }}';
             console.log(username)
             # const response = await github.request('GET /users/{username}', {
             #   username: username
