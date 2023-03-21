@@ -28,7 +28,7 @@ jobs:
           script: |
             const { Octokit } = require("@octokit/rest");
             const octokit = new Octokit({
-              auth: $ACCESS_TOKEN
+              auth: ACCESS_TOKEN
             });
             const { issue, repository, owner } = context.payload
             const username = 'tuandang-rikai';
