@@ -42,7 +42,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add user as reviewer
         uses: actions/github-script@v6
-        if: ${{ steps.check_users.outputs.result.length > 0 }}
+        if: ${{ steps.check_users.outputs.result }} !== []
         with:
           script: |
             const available_users = ${{ steps.check_users.outputs.result }}
