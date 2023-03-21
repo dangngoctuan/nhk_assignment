@@ -15,20 +15,18 @@ jobs:
       - name: Extract username
         id: extract
         run: |
-          echo "::set-output name=mentioned_users::$(echo '${{ github.event.comment.body }}' | grep -oP '@([a-zA-Z0-9-_]+) [Rr]eview [Rr]equest' | cut -c 2- | cut -d ' ' -f1)"
+          echo "mentioned_users=$(echo '${{ github.event.comment.body }}' | grep -oP '@([a-zA-Z0-9-_]+) [Rr]eview [Rr]equest' | cut -c 2- | cut -d ' ' -f1)" >> $GITHUB_OUTPUT
       - name: Check if user exists
         uses: actions/github-script@v6
         id: check_user
         with:
           script: |
             const username = '${{ steps.extract.outputs.result }}';
-            const abc = '${{ steps.extract.outputs.result.mentioned_users }}';
             console.log(username)
-            console.log(abc)
-            const response = await github.request('GET /users/{username}', {
-              username: username
-            });
-            return response.status === 200;
+            # const response = await github.request('GET /users/{username}', {
+            #   username: username
+            # });
+            # return response.status === 200;
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       # - name: Add user as reviewer
