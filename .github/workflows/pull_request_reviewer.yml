@@ -21,8 +21,12 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const username = '${{ steps.extract.outputs.match }}';
-            console.log(username)
+            const group1 = '${{ steps.extract.outputs.group1 }}';
+            console.log(group1)
+            const group2 = '${{ steps.extract.outputs.group2 }}';
+            console.log(group2)
+            const group3 = '${{ steps.extract.outputs.group3 }}';
+            console.log(group3)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
