@@ -9,10 +9,9 @@ on:
 jobs:
   add_reviewer:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Extract username
         uses: actions-ecosystem/action-regex-match@v2
         id: extract
@@ -20,7 +19,7 @@ jobs:
           text: ${{ github.event.comment.body }}
           regex: '@([a-zA-Z0-9-_]+)'
       - name: Add user as reviewer
-        uses: actions/github-script@v4
+        uses: actions/github-script@v6
         with:
           script: |
             const username = '${{ steps.extract.outputs.group1 }}';
@@ -35,75 +34,3 @@ jobs:
             });
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-# name: Pull Request Reviewer
-
-# on: [issue_comment, pull_request_review]
-# jobs:
-#   request-reviewer:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
-#       - name: Checkout Pull Request
-#         run: hub pr checkout ${{ github.event.issue.number }}
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       - name: assign_review_by_comment
-#         uses: AveryCameronUofR/add-reviewer-gh-action@1.0.3
-#         with:
-#           reviewers: "tuandang-rikai"
-#           token: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Add Reviewers
-      #   uses: hkusu/review-assign-action@v1
-      #   id: assign
-      #   with:
-      #     reviewers: tuandang-rikai
-      # - name: Extract username
-      #   uses: actions-ecosystem/action-regex-match@v2
-      #   id: extract
-      #   with:
-      #     text: ${{ github.event.comment.body }}
-      #     regex: '(@\S+)'
-      # - name: Check if user exists
-      #   uses: actions/github-script@v5
-      #   with:
-      #     script: |
-      #       const username = '${{ steps.extract.outputs.matches }}';
-      #       console.log(username)
-      #       const octokit = require("@octokit/request");
-      #       const response = await octokit.request("GET /users/{username}", {
-      #         username: username
-      #       });
-      #       console.log(response.data)
-      #       return { exists: response.data.total_count === 1, username: username };
-      #   id: check
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: Add user as reviewer
-      #   uses: actions/github-script@v5
-      #   with:
-      #     script: |
-      #       const { owner, repo } = context.repo;
-      #       const username = 'tuandang-rikai';
-      #       pull_number = context.payload.issue.number
-      #       const response = await github.pulls.createReviewRequest({ owner: owner, repo: repo, pull_number: pull_number, reviewers: [username] });
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-# name: Testing actions
-# on: [issue_comment]
-
-# jobs:
-#   testing-actions:
-#     runs-on: ubuntu-latest
-#     steps:
-#       # Checkout source code
-#       - name: Checkout
-#         uses: actions/checkout@v2
-#       - name: Checkout Pull Request
-#         run: hub pr checkout ${{ github.event.issue.number }}
-#         env:
-#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
