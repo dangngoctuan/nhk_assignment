@@ -14,14 +14,14 @@ jobs:
       - name: Extract username
         id: extract
         run: |
-          $(echo "${GITHUB_EVENT.issue.body}" | grep -oE '@([a-zA-Z0-9-]+)' | cut -c 2-)
+          mentioned_users=$(echo "${GITHUB_EVENT.issue.body}" | grep -oE '@([a-zA-Z0-9-]+)' | cut -c 2-)
+          echo "mentioned_users=$mentioned_users" >> "$GITHUB_OUTPUT"
       - name: Add user as reviewer
         uses: actions/github-script@v4
         with:
           script: |
-            const username = '${{ Object.keys(steps.extract.outputs) }}';
-            console.log('${{ Object.keys(steps.extract.outputs) }}')
-            console.log('${{ Object.values(steps.extract.outputs) }}')
+            const username = '${{ steps.extract.outputs.mentioned_users }}';
+            console.log(username)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
