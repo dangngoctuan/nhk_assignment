@@ -23,11 +23,11 @@ jobs:
         id: check_users
         with:
           script: |
-            let list_users = '${{ steps.extract.outputs.mentioned_users }}';
-            list_users = list_users.split(' ')
-            let available_users = []
+            let mentioned_users = '${{ steps.extract.outputs.mentioned_users }}';
+            mentioned_users = mentioned_users.split(' ');
+            let available_users = [];
             const pull_request_author = '${{ github.event.issue.user.login }}';
-            for (const username of list_users) {
+            for (const username of mentioned_users) {
               if ( username !== pull_request_author ) {
                 const response = await github.request('GET /users/{username}', {
                   username: username
@@ -36,8 +36,8 @@ jobs:
                   available_users.push(username)
                 }
               }
-            }
-            return available_users
+            };
+            return available_users;
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add user as reviewer
@@ -46,7 +46,6 @@ jobs:
         with:
           script: |
             const available_users = ${{ steps.check_users.outputs.result }}
-            console.log(available_users)
             const { issue, repository } = context.payload
             const reviewers = available_users
             const pull_number = issue.number
