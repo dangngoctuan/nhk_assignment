@@ -20,30 +20,34 @@ jobs:
           regex: '@([a-zA-Z0-9-_]+) [Rr]eview [Rr]equest'
       - name: Check if user exists
         uses: actions/github-script@v6
+        id: check_user
         with:
           script: |
             const username = '${{ steps.extract.outputs.group1 }}';
-            const response = await github.request('GET /users/abcfhfjsfks', {
+            const response = await github.request('GET /users/{username}', {
               username: username
             });
-            console.log(response)
+            return {
+              exists: response.status === 200,
+              username: response.data.login
+            }
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Add user as reviewer
-      #   if: steps.extract.outputs.group1.length > 0
-      #   uses: actions/github-script@v6
-      #   with:
-      #     script: |
-      #       const username = '${{ steps.extract.outputs.group1 }}';
-      #       console.log(username)
-      #       const { issue, repository } = context.payload
-      #       const reviewers = [username]
-      #       const pull_number = issue.number
-      #       const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
-      #         owner: 'dangngoctuan',
-      #         repo: repository.name,
-      #         pull_number: pull_number,
-      #         reviewers: reviewers
-      #       });
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Add user as reviewer
+        if: ${{ steps.check_user.outputs.exists }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const username = '${{ steps.check_user.outputs.username }}';
+            console.log(username)
+            const { issue, repository } = context.payload
+            const reviewers = [username]
+            const pull_number = issue.number
+            const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
+              owner: 'dangngoctuan',
+              repo: repository.name,
+              pull_number: pull_number,
+              reviewers: reviewers
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
