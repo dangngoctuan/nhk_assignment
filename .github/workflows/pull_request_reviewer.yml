@@ -36,7 +36,6 @@ jobs:
         with:
           script: |
             const username = '${{ steps.extract.outputs.group1 }}';
-            console.log(username)
             const { issue, repository } = context.payload
             const reviewers = [username]
             const pull_number = issue.number
