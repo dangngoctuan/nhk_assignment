@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Install dependence
+        run: npm install @octokit/core @octokit/request
       - name: Add user as reviewer
         # run: |
         #   curl \
@@ -22,10 +24,11 @@ jobs:
         uses: actions/github-script@v5
         with:
           script: |
+            const octokit = require("@octokit/request")
             const { issue, repository, owner } = context.payload
             const username = 'tuandang-rikai';
             const pull_number = issue.number
-            const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
+            const response = await octokit.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
               owner: owner,
               repo: repository,
               pull_number: pull_number,
