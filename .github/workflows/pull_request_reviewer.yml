@@ -41,10 +41,10 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const username = '${{ steps.check_users.outputs.result }}';
-            console.log(username)
+            const available_users = ${{ steps.check_users.outputs.result.available_users }};
+            console.log(available_users)
             const { issue, repository } = context.payload
-            const reviewers = [username]
+            const reviewers = available_users
             const pull_number = issue.number
             await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
               owner: 'dangngoctuan',
