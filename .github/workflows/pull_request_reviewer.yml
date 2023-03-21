@@ -34,14 +34,14 @@ jobs:
                 available_users.push(username)
               }
             }
-            console.log({ available_users: available_users })
+            return available_users
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Add user as reviewer
         uses: actions/github-script@v6
         with:
           script: |
-            const available_users = '${{ steps.check_users.outputs.result.available_users }}';
+            const available_users = '${{ steps.check_users.outputs.result }}';
             console.log(available_users)
             const { issue, repository } = context.payload
             const reviewers = available_users
