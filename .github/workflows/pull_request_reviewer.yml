@@ -23,7 +23,7 @@ jobs:
         with:
           script: |
             const username = '${{ steps.extract.outputs.group1 }}';
-            const response = await github.request('GET /users', {
+            const response = await github.request('GET /users/abcfhfjsfks', {
               username: username
             });
             console.log(response)
