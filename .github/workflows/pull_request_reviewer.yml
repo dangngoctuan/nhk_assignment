@@ -22,14 +22,14 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const { issue, repository, owner } = context.payload
+            const { issue, repository} = context.payload
             const username = 'dangngoctuan';
             const reviewers = [username]
             console.log(context)
             const pull_number = issue.number
-            const repository_name = repository.full_name
-            const response = await github.request('POST /repos/{repo}/pulls/{pull_number}/requested_reviewers', {
-              repo: repository_name,
+            const response = await github.request('POST /repos/{owner}/{repo}/pulls/{pull_number}/requested_reviewers', {
+              owner: 'dangngoctuan'
+              repo: repository.name,
               pull_number: pull_number,
               reviewers: reviewers,
               headers: {
