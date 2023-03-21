@@ -14,7 +14,7 @@ jobs:
       - name: Extract username
         id: extract
         run: |
-          echo "mentioned_users=$(echo "@dangngoctuan @tuandang-rikai pelase review" | grep -oE @([a-zA-Z0-9-_]+) | cut -c 2-)" >> "$GITHUB_OUTPUT"
+          echo "mentioned_users=$(echo "@dangngoctuan @tuandang-rikai pelase review" | grep -oP '@([a-zA-Z0-9-_]+)' | cut -c 2-)" >> "$GITHUB_OUTPUT"
       - name: Add user as reviewer
         uses: actions/github-script@v4
         with:
