@@ -28,8 +28,7 @@ jobs:
             const pull_number = issue.number
             console.log(context)
             const repo_name = repository.name
-            const owner_name = owner.login
-            const response = await github.request("POST /repos/${{ owner_name }}/${{ repo_name }}/pulls/${{ pull_number }}/requested_reviewers", {
+            const response = await github.request("POST /repos/${{ owner.login }}/${{ repo_name }}/pulls/${{ pull_number }}/requested_reviewers", {
               reviewers: reviewers,
               headers: {
                 'X-GitHub-Api-Version': '2022-11-28'
