@@ -17,11 +17,12 @@ jobs:
           git merge --ff-only ${{ github.event.pull_request.head.ref }}
 
       - name: Create Release
-        uses: actions/create-release@v2
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v1.0.1 # Set the tag name here
-          release_name: Release v1.0.1 # Set the release name here
+          tag_name: ${{ github.event.pull_request.head.ref }}
+          release_name: Release ${{ github.event.pull_request.head.ref }}
           draft: false
           prerelease: false
