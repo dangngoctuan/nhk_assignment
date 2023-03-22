@@ -10,20 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Merge changes
         run: |
-          git config --global user.email "dangtuan030690@gmail.com"
-          git config --global user.name "Tuan Dang"
           git merge --ff-only ${{ github.event.pull_request.head.ref }}
 
       - name: Create Release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v1.0.0 # Set the tag name here
-          release_name: Release v1.0.0 # Set the release name here
+          tag_name: v1.0.1 # Set the tag name here
+          release_name: Release v1.0.1 # Set the release name here
           draft: false
           prerelease: false
