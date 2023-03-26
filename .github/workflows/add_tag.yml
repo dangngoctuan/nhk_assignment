@@ -31,7 +31,7 @@ jobs:
             return list_milestones.data.first
       - name: Get information of pull requests in latest milestone
         uses: actions/github-script@v6
-        if: ${{ steps.latest_milestone.outputs.result !== undefined }}
+        if: ${{ steps.latest_milestone.outputs.result != undefined }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
