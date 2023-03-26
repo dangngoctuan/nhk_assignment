@@ -19,10 +19,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          script:
+          script: |
             const { issue, repository } = context.payload;
             const list_milestones = await github.request('GET /repos/{owner}/{repo}/milestones', {
-              owner: 'dangngoctuan',
+              owner: ${{env.OWNER}},
               repo: repository.name,
               sort: 'due_on',
               direction: 'desc'
