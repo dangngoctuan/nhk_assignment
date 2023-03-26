@@ -30,7 +30,6 @@ jobs:
             });
             console.log(list_milestones.data)
             const latest_milestone = list_milestones.data[0]
-            console.log(latest_milestone)
             return latest_milestone;
       - name: Get information of pull requests in latest milestone
         uses: actions/github-script@v6
@@ -40,13 +39,12 @@ jobs:
         with:
           script: |
             const latest_milestone = ${{ steps.milestone.outputs.result }}
-            console.log(latest_milestone)
             if (latest_milestone == undefined) {
               return []
             }
             const { issue, repository } = context.payload;
             const response = await github.request(
-              'GET /search/issues?q=milestone:{milestone_title}%20repo:{owner}/{repo}', {
+              'GET /search/issues?q=is:pr%20milestone:'{milestone_title}'%20repo:{owner}/{repo}', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               milestone_title: latest_milestone.title
