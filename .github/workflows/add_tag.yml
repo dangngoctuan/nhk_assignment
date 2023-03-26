@@ -44,13 +44,12 @@ jobs:
             }
             const { issue, repository } = context.payload;
             const response = await github.request(
-              'GET /search/issues?q=is:pr+milestone:{milestone_title}+repo:{owner}/{repo}', {
+              'GET /search/issues?q=type:pr+milestone:{milestone_title}+repo:{owner}/{repo}', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               milestone_title: latest_milestone.title
             })
-            console.log(response)
-            const list_pull_requests = response.items;
+            const list_pull_requests = response.data.items;
             console.log(list_pull_requests)
             return list_pull_requests;
       - name: Create description for tag
