@@ -22,7 +22,7 @@ jobs:
           script:
             const { issue, repository } = context.payload;
             const list_milestones = await github.request('GET /repos/{owner}/{repo}/milestones'', {
-              owner: $OWNER,
+              owner: ${{ env.OWNER }},
               repo: repository.name,
               sort: 'due_on',
               direction: 'desc'
