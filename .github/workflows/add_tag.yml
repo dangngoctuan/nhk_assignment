@@ -83,5 +83,7 @@ jobs:
               owner: '${{env.OWNER}}',
               repo: repository.name,
               tag: tag_version,
-              message: description
+              message: description,
+              object: '${{ github.sha }}',
+              type: 'commit'
             });
