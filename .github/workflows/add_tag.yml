@@ -5,23 +5,38 @@ on:
     branches:
       - main
 
+env:
+  OWNER: dangngoctuan
+
 jobs:
   release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Merge changes
-        run: |
-          git merge --ff-only ${{ github.ref }}
-
-      - name: Create Release
-        uses: actions/create-release@v1
+      - name: Get latest milestone
+        uses: actions/github-script@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v1.0.1 # Set the tag name here
-          release_name: Release v1.0.1 # Set the release name here
-          draft: false
-          prerelease: false
+          script:
+            const { issue, repository } = context.payload;
+            const list_milestones = await github.request('GET /repos/{owner}/{repo}/milestones'', {
+              owner: '$OWNER',
+              repo: repository.name,
+              sort: 'due_on',
+              direction: 'desc'
+            });
+            console.log(list_milestones)
+      # - name: Get information of pull requests in latest milestone
+      #   uses: actions/github-script@v6
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     script:
+      # - name: Create Release Tag
+      #   uses: actions/github-script@v6
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     script:
