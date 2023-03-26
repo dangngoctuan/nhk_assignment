@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            const latest_milestone = ${{ steps.latest_milestone.outputs.result }};
+            const latest_milestone = ${{ steps.latest_milestone.outputs.result }}
             if (latest_milestone == undefined) {
               return []
             }
@@ -56,7 +56,7 @@ jobs:
         id: tag_description
         with:
           script: |
-            const list_pull_requests = ${{ steps.pull_requests.outputs.result }};
+            const list_pull_requests = ${{ steps.pull_requests.outputs.result }}
             if (list_pull_requests.length == 0) {
               return
             }
