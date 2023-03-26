@@ -72,6 +72,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
+            const { issue, repository } = context.payload;
             const latest_milestone = ${{ steps.latest_milestone.outputs.result }};
             if (latest_milestone == undefined) {
               return
