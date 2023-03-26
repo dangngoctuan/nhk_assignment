@@ -31,12 +31,16 @@ jobs:
             return list_milestones.data.first
       - name: Get information of pull requests in latest milestone
         uses: actions/github-script@v6
-        if: ${{ steps.latest_milestone.outputs.result != undefined }}
+        id: pull_requests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
             const latest_milestone = steps.latest_milestone.outputs.result
+            console.log(latest_milestone)
+            if (latest_milestone == undefined) {
+              return []
+            }
             const { issue, repository } = context.payload;
             const response = await github.request(
               'GET /repos/{owner}/{repo}/milestones/{milestone_number}/labels', {
