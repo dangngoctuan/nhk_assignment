@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Get latest milestone
         uses: actions/github-script@v6
-        id: milestone
+        id: latest_milestone
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -38,23 +38,40 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            const latest_milestone = ${{ steps.milestone.outputs.result }};
+            const latest_milestone = ${{ steps.latest_milestone.outputs.result }};
             if (latest_milestone == undefined) {
               return []
             }
             const { issue, repository } = context.payload;
             const response = await github.request(
-              'GET /search/issues?q=milestone:{milestone_title}+type:pr+repo:{owner}/{repo}', {
+              'GET /search/issues?q=is:pr+milestone:{milestone_title}+repo:{owner}/{repo}', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               milestone_title: latest_milestone.title
             })
-            console.log(response)
+            const list_pull_requests = response.items;
+            return list_pull_requests;
+      - name: Create description for tag
+        uses: actions/github-script@v6
+        id: tag_description
+        with:
+          script: |
+            const list_pull_requests = ${{ steps.pull_requests.outputs.result }};
+            if (list_pull_requests.length == 0) {
+              return
+            }
+            let description = '## What's Changed \n'
+            for (const item of list_pull_requests) {
+              description += '- ' + item.title + '\n' + '- ' + item.html_url + '\n'
+            }
 
+            return description;
+      - name: Create Release Tag
+        uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const description = ${{ steps.tag_description.outputs.result }};
+            console.log(description)
 
-      # - name: Create Release Tag
-      #   uses: actions/github-script@v6
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     script:
