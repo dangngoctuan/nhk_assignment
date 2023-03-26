@@ -5,12 +5,12 @@ on:
     branches:
       - main
 
-env:
-  OWNER: dangngoctuan
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      OWNER: dangngoctuan
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,8 +21,8 @@ jobs:
         with:
           script:
             const { issue, repository } = context.payload;
-            const list_milestones = await github.request('GET /repos/{owner}/{repo}/milestones'', {
-              owner: "$OWNER",
+            const list_milestones = await github.request('GET /repos/{owner}/{repo}/milestones', {
+              owner: "${{env.OWNER}}",
               repo: repository.name,
               sort: 'due_on',
               direction: 'desc'
