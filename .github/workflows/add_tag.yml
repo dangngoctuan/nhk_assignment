@@ -44,7 +44,7 @@ jobs:
             }
             const { issue, repository } = context.payload;
             const response = await github.request(
-              'GET /search/issues?q=type:pr+milestone:{milestone_title}+repo:{owner}/{repo}', {
+              'GET /search/issues?q=milestone:{milestone_title}+type:pr+repo:{owner}/{repo}', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               milestone_title: latest_milestone.title
