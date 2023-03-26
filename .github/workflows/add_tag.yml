@@ -49,6 +49,7 @@ jobs:
               repo: repository.name,
               milestone_title: latest_milestone.title
             })
+            console.log(response)
             const list_pull_requests = response.data.items;
             console.log(list_pull_requests)
             return list_pull_requests;
