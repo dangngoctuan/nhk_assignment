@@ -38,13 +38,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
-            const latest_milestone = ${{ steps.milestone.outputs.result }}
+            const latest_milestone = ${{ steps.milestone.outputs.result }};
             if (latest_milestone == undefined) {
               return []
             }
             const { issue, repository } = context.payload;
             const response = await github.request(
-              'GET /search/issues?q=is:pr%20milestone:'{milestone_title}'%20repo:{owner}/{repo}', {
+              'GET /search/issues?q=milestone:{milestone_title}+type:pr+repo:{owner}/{repo}', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               milestone_title: latest_milestone.title
