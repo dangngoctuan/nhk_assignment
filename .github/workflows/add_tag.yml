@@ -51,7 +51,7 @@ jobs:
             })
             const list_pull_requests = response.data.items;
             return list_pull_requests;
-      - name: Create description for tag
+      - name: Add description for tag
         uses: actions/github-script@v6
         id: tag_description
         with:
@@ -84,7 +84,7 @@ jobs:
               repo: repository.name,
               tag: tag_version,
               message: description,
-              object: '${{ github.sha }}',
+              object: 'b63739826a3803617f6b44ea1d89732e2f01fdfa',
               type: 'commit'
             });
 
