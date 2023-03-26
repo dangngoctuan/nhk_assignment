@@ -45,10 +45,11 @@ jobs:
               return []
             }
             const { issue, repository } = context.payload;
-            const response = await github.request('GET /search/issues', {
+            const response = await github.request(
+              'GET /search/issues?q=milestone:{milestone_title}%20repo:{owner}/{repo}', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
-              milestone: latest_milestone.title
+              milestone_title: latest_milestone.title
             })
             console.log(response)
 
