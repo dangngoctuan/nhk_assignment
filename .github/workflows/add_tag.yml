@@ -49,9 +49,7 @@ jobs:
               repo: repository.name,
               milestone_title: latest_milestone.title
             })
-            console.log(response)
             const list_pull_requests = response.data.items;
-            console.log(list_pull_requests)
             return list_pull_requests;
       - name: Create description for tag
         uses: actions/github-script@v6
@@ -62,9 +60,9 @@ jobs:
             if (list_pull_requests.length == 0) {
               return
             }
-            let description = '## What's Changed \n'
+            let description = "## What's Changed \n"
             for (const item of list_pull_requests) {
-              description += '- ' + item.title + '\n' + '- ' + item.html_url + '\n'
+              description += ' - ' + item.title + '\n' + ' - ' + item.html_url + '\n'
             }
 
             return description;
