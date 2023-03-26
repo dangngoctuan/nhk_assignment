@@ -79,7 +79,7 @@ jobs:
             }
             const description = ${{ steps.tag_description.outputs.result }};
             const tag_version = latest_milestone.title
-            await github.request('POST /repos/{owner}/{repo}/git/tags', {
+            const response = await github.request('POST /repos/{owner}/{repo}/git/tags', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               tag: tag_version,
@@ -87,3 +87,5 @@ jobs:
               object: '${{ github.sha }}',
               type: 'commit'
             });
+
+            console.log(response)
