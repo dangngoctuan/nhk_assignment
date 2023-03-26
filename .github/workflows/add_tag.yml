@@ -62,7 +62,7 @@ jobs:
             }
             let description = "## What's Changed \n"
             for (const item of list_pull_requests) {
-              description += ' - ' + item.title + '\n' + ' - ' + item.html_url + '\n'
+              description += ' - ' + item.title + '\n' + '  ' + item.html_url + '\n'
             }
 
             return description;
@@ -72,6 +72,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           script: |
+            const latest_milestone = ${{ steps.latest_milestone.outputs.result }};
+            if (latest_milestone == undefined) {
+              return
+            }
             const description = ${{ steps.tag_description.outputs.result }};
-            console.log(description)
-
+            const tag_version = latest_milestone.title
+            await github.request('POST /repos/{owner}/{repo}/git/tags', {
+              owner: '${{env.OWNER}}',
+              repo: repository.name,
+              tag: tag_version,
+              message: description
+            });
