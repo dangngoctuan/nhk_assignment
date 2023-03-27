@@ -68,7 +68,7 @@ jobs:
             return description;
       - name: Create Release Tag
         uses: actions/github-script@v6
-        id: tag
+        id: create_tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -96,7 +96,7 @@ jobs:
         with:
           script: |
             const { issue, repository } = context.payload;
-            const tag = ${{ steps.tag.outputs.result }};
+            const tag = ${{ steps.create_tag.outputs.result }};
             console.log(tag)
             if (tag.status != 201) {
               return
