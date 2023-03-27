@@ -68,6 +68,7 @@ jobs:
             return description;
       - name: Create Release Tag
         uses: actions/github-script@v6
+        id: tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -79,7 +80,7 @@ jobs:
             }
             const description = ${{ steps.tag_description.outputs.result }};
             const tag_version = latest_milestone.title
-            const response = await github.request('POST /repos/{owner}/{repo}/tags', {
+            await github.request('POST /repos/{owner}/{repo}/tags', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               tag: tag_version,
@@ -87,5 +88,23 @@ jobs:
               object: '${{ github.sha }}',
               type: 'commit'
             });
+      - name: Create Reference
+        uses: actions/github-script@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const { issue, repository } = context.payload;
+            const tag = ${{ steps.tag.outputs.result }};
+            console.log(tag)
+            if (tag.status != 201) {
+              return
+            }
+            const ref =  await github.request('POST /repos/{owner}/{repo}/git/refs', {
+              owner: '${{env.OWNER}}',
+              repo: repository.name,
+              ref: 'refs/heads/${{ tag.data.tag }}',
+              sha: '${{ tag.data.object.sha }}',
+            })
 
-            console.log(response)
+            console.log(ref)
