@@ -80,7 +80,7 @@ jobs:
             }
             const description = ${{ steps.tag_description.outputs.result }};
             const tag_version = latest_milestone.title
-            await github.request('POST /repos/{owner}/{repo}/tags', {
+            const tag = await github.request('POST /repos/{owner}/{repo}/tags', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               tag: tag_version,
@@ -88,6 +88,7 @@ jobs:
               object: '${{ github.sha }}',
               type: 'commit'
             });
+            return tag;
       - name: Create Reference
         uses: actions/github-script@v6
         env:
