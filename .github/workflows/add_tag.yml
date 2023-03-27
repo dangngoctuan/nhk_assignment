@@ -80,7 +80,7 @@ jobs:
             }
             const description = ${{ steps.tag_description.outputs.result }};
             const tag_version = latest_milestone.title
-            const tag = await github.request('POST /repos/{owner}/{repo}/tags', {
+            const tag = await github.request('POST /repos/{owner}/{repo}/git/tags', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
               tag: tag_version,
