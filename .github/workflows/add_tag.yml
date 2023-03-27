@@ -104,7 +104,7 @@ jobs:
             const ref =  await github.request('POST /repos/{owner}/{repo}/git/refs', {
               owner: '${{env.OWNER}}',
               repo: repository.name,
-              ref: 'refs/heads/${{ tag.data.tag }}',
+              ref: 'refs/heads/${ tag.data.tag }',
               sha: '${{ tag.data.object.sha }}',
             })
 
