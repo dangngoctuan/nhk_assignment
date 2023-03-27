@@ -62,7 +62,7 @@ jobs:
             }
             let description = "## What's Changed \n"
             for (const item of list_pull_requests) {
-              description += ' - ' + item.title + '\n' + '  ' + item.html_url + '\n'
+              description += ' - ' + item.title + '  ' + item.html_url + '\n'
             }
 
             return description;
