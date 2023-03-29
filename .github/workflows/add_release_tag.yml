@@ -1,0 +1,92 @@
+name: Create Release Tag
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  add_release_tag:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    env:
+      OWNER: sky-grid-inc
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Get latest milestone
+        uses: actions/github-script@v6
+        id: latest_milestone
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            const { issue, repository } = context.payload;
+            const list_milestones = await github.request('GET /repos/{owner}/{repo}/milestones', {
+              owner: '${{env.OWNER}}',
+              repo: repository.name,
+              sort: 'due_on',
+              direction: 'desc'
+            });
+            const latest_milestone = list_milestones.data[1]
+            return latest_milestone;
+      - name: Get information of pull requests in latest milestone
+        uses: actions/github-script@v6
+        id: pull_requests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          script: |
+            console.log(${{ steps.latest_milestone.outputs.result }})
+            # const latest_milestone = ${{ steps.latest_milestone.outputs.result }};
+            # if (latest_milestone == undefined) {
+            #   return []
+            # }
+
+            # const { issue, repository } = context.payload;
+            # const response = await github.request(
+            #   'GET /search/issues?q=milestone:{milestone_title}+type%3Apr+repo:{owner}/{repo}', {
+            #   owner: '${{env.OWNER}}',
+            #   repo: repository.name,
+            #   milestone_title: latest_milestone.title
+            # })
+            # const list_pull_requests = response.data.items;
+            # return list_pull_requests;
+      # - name: Prepare description for tag
+      #   uses: actions/github-script@v6
+      #   id: tag_description
+      #   with:
+      #     script: |
+      #       const list_pull_requests = ${{ steps.pull_requests.outputs.result }};
+      #       if (list_pull_requests.length == 0) {
+      #         return
+      #       }
+      #       let description = "## What's Changed \n"
+      #       for (const item of list_pull_requests) {
+      #         description += ' - ' + item.title + '  ' + item.html_url + '\n'
+      #       }
+      #       return description;
+      # - name: Create Release Tag
+      #   uses: actions/github-script@v6
+      #   id: create_release_tag
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     script: |
+      #       const { issue, repository } = context.payload;
+      #       const latest_milestone = ${{ steps.latest_milestone.outputs.result }};
+      #       if (latest_milestone == undefined) {
+      #         return
+      #       }
+      #       const description = ${{ steps.tag_description.outputs.result }};
+      #       const tag_version = latest_milestone.title
+      #       await github.request('POST /repos/{owner}/{repo}/releases', {
+      #         owner: '${{env.OWNER}}',
+      #         repo: repository.name,
+      #         tag_name: tag_version,
+      #         target_commitish: 'main',
+      #         name: tag_version,
+      #         body: description,
+      #         draft: false,
+      #         prerelease: false
+      #       });
