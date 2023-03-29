@@ -46,8 +46,7 @@ jobs:
               repo: repository.name,
               milestone_title: latest_milestone.title
             })
-            const list_pull_requests = response.data.items;
-            console.log(list_pull_requests)
+            const list_pull_requests = [];
             return list_pull_requests;
       - name: Prepare description for tag
         uses: actions/github-script@v6
@@ -70,7 +69,7 @@ jobs:
         with:
           script: |
             const { issue, repository } = context.payload;
-            const latest_milestone = ${{ steps.latest_milestone.outputs.result }};
+            const latest_milestone = ${{ steps.latest_milestone.outputs.result }}
             const description = ${{ steps.tag_description.outputs.result }}
             const tag_version = latest_milestone.title
             await github.request('POST /repos/{owner}/{repo}/releases', {
