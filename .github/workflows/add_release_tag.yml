@@ -28,7 +28,7 @@ jobs:
               sort: 'due_on',
               direction: 'desc'
             });
-            const latest_milestone = list_milestones.data[5]
+            const latest_milestone = list_milestones.data[0]
             return latest_milestone;
       - name: Get information of pull requests in latest milestone
         uses: actions/github-script@v6
