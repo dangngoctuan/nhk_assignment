@@ -51,7 +51,7 @@ jobs:
       - name: Prepare description for tag
         uses: actions/github-script@v6
         id: tag_description
-        if: ${{ steps.pull_requests.outputs.result.length > 0 }}
+        if: steps.pull_requests.outputs.result.length > 0
         with:
           script: |
             const list_pull_requests = ${{ steps.pull_requests.outputs.result }};
@@ -70,7 +70,7 @@ jobs:
           script: |
             const { issue, repository } = context.payload;
             const latest_milestone = ${{ steps.latest_milestone.outputs.result }};
-            const description = ${{ steps.tag_description.outputs.result }};
+            const description = ${{ steps.tag_description.outputs.result }}
             const tag_version = latest_milestone.title
             await github.request('POST /repos/{owner}/{repo}/releases', {
               owner: '${{env.OWNER}}',
