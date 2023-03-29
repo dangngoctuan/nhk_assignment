@@ -25,6 +25,9 @@ jobs:
           script: |
             let mentioned_users = '${{ steps.extract.outputs.mentioned_users }}';
             mentioned_users = mentioned_users.split(' ');
+            if (mentioned_users.length == 0) {
+              return;
+            }
             let available_users = [];
             const pull_request_author = '${{ github.event.issue.user.login }}';
             for (const username of mentioned_users) {
