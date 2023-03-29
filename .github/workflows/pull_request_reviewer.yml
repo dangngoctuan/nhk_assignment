@@ -25,6 +25,7 @@ jobs:
           script: |
             let mentioned_users = '${{ steps.extract.outputs.mentioned_users }}';
             mentioned_users = mentioned_users.split(' ');
+            console.log(mentioned_users)
             if (mentioned_users.length == 0) {
               return;
             }
