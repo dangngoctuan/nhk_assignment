@@ -57,7 +57,7 @@ jobs:
             const list_pull_requests = ${{ steps.pull_requests.outputs.result }};
             let description = "## What's Changed \n"
             for (const item of list_pull_requests) {
-              description += ` - [${item.title}](${item.html_url})\n`
+              description += ' - [${item.title}](${item.html_url})\n'
             }
             return description;
       - name: Create Release Tag
