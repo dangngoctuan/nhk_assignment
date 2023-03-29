@@ -46,7 +46,7 @@ jobs:
               repo: repository.name,
               milestone_title: latest_milestone.title
             })
-            const list_pull_requests = [];
+            const list_pull_requests = response.data.items;
             return list_pull_requests;
       - name: Prepare description for tag
         uses: actions/github-script@v6
