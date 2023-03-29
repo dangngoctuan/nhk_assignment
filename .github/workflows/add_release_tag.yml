@@ -10,7 +10,7 @@ jobs:
     permissions: write-all
     runs-on: ubuntu-latest
     env:
-      OWNER: sky-grid-inc
+      OWNER: dangngoctuan
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
