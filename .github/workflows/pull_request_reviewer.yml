@@ -1,6 +1,7 @@
 name: Add Pull Request Reviewer
 
 on:
+  workflow_dispatch: {}
   issue_comment:
     types: [created]
     branches:
